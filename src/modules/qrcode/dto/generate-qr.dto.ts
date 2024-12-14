@@ -15,11 +15,6 @@ export class GenerateQRDto {
   @IsString()
   shiftId?: string;
 
-  @IsOptional()
-  @IsUUID()
-  @IsString()
-  timekeepingId?: string;
-
   @IsEnum(QRCodeType)
   type: QRCodeType;
 }

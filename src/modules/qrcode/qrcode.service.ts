@@ -19,14 +19,13 @@ export class QRCodeService {
   }
 
   async generateAttendanceQR(generateQRDto: GenerateQRDto): Promise<string> {
-    const { departmentId, shiftId, timekeepingId, type } = generateQRDto;
+    const { departmentId, shiftId, type } = generateQRDto;
 
     // Tạo JWT token với thời gian sống 15 phút
     const token = await this.jwtService.signAsync(
       {
         departmentId,
         shiftId,
-        timekeepingId,
         type,
         timestamp: new Date().toISOString(),
       },
@@ -36,7 +35,7 @@ export class QRCodeService {
     );
 
     // Tạo URL endpoint với token
-    const endpoint = type === QRCodeType.CHECKIN ? '/timekeeping/checkin' : '/timekeeping/checkout';
+    const endpoint = type === QRCodeType.CHECKIN ? '/timekeeping/checkin/qr' : '/timekeeping/checkout/qr';
     const qrData = `${process.env.CLIENT_URL}${endpoint}?token=${token}`;
 
     // Tạo mã QR từ URL
@@ -44,21 +43,31 @@ export class QRCodeService {
   }
 
   async verifyQRToken(token: string): Promise<any> {
+    if (!token) {
+      throw new UnauthorizedException('Token must be provided');
+    }
+
     try {
-      const decoded = await this.jwtService.verifyAsync(token);
-      
-      // Kiểm tra xem token đã hết hạn chưa
-      const tokenTimestamp = new Date(decoded.timestamp);
+      const decodedToken = await this.jwtService.verifyAsync(token);
+
+      // Check if token has expired
+      const tokenTimestamp = new Date(decodedToken.timestamp);
       const currentTime = new Date();
-      const diffInMinutes = (currentTime.getTime() - tokenTimestamp.getTime()) / 1000 / 60;
-      
+      const diffInMinutes =
+        (currentTime.getTime() - tokenTimestamp.getTime()) / 1000 / 60;
+
       if (diffInMinutes > 15) {
-        throw new UnauthorizedException('QR code has expired');
+        throw new UnauthorizedException(
+          `QR code has expired after ${diffInMinutes} minutes`,
+        );
       }
 
-      return decoded;
+      return decodedToken;
     } catch (error) {
-      throw new UnauthorizedException('Invalid QR code');
+      throw new UnauthorizedException({
+        description: 'Invalid QR code',
+        message: error.message,
+      });
     }
   }
 }

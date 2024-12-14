@@ -32,9 +32,9 @@ export class CreateEmployeeDto {
   @IsEmail({}, { message: 'Email không hợp lệ' })
   email: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsDateString({}, { message: 'birthDate phải là chuỗi ngày tháng hợp lệ theo ISO 8601' })
-  birthDate: string;
+  birthDate?: string;
 
   @IsOptional()
   @IsNotEmpty({ message: 'departmentId là bắt buộc đối' })

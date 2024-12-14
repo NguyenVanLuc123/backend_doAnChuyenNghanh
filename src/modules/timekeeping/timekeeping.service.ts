@@ -84,6 +84,14 @@ export class TimekeepingService {
   }
 
   async checkInWithQR(token: string, employeeId: string): Promise<Timekeeping> {
+    if (!token) {
+      throw new UnauthorizedException('Token must be provided');
+    }
+
+    if (!employeeId) {
+      throw new UnauthorizedException('Employee ID must be provided');
+    }
+
     // Xác thực token từ mã QR
     const qrData = await this.qrcodeService.verifyQRToken(token);
     

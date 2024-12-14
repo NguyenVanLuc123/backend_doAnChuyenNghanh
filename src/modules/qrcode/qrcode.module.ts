@@ -1,22 +1,11 @@
 import { Module } from '@nestjs/common';
+import { SharedModule } from '../shared/shared.module';
 import { QRCodeService } from './qrcode.service';
 import { QRCodeController } from './qrcode.controller';
-import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('JWT_SECRET'),
-        signOptions: {
-          expiresIn: '15m',
-        },
-      }),
-      inject: [ConfigService],
-    }),
-    ConfigModule,
+    SharedModule,
   ],
   controllers: [QRCodeController],
   providers: [QRCodeService],

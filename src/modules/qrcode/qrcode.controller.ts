@@ -13,16 +13,6 @@ import { CurrentUser } from '../../common/decorators/current-user.decorator';
 export class QRCodeController {
   constructor(private readonly qrCodeService: QRCodeService) {}
 
-  // @Get('shift/:shiftId')
-  // @UseGuards(AdminGuard)
-  // async generateShiftQRCode(
-  //   @Param('shiftId') shiftId: string,
-  //   @Query('date') date: string,
-  // ) {
-  //   const qrCode = await this.qrCodeService.generateShiftQRCode(shiftId, date);
-  //   return { qrCode };
-  // }
-
   @Post('generate')
   @UseGuards(RolesGuard)
   @Roles(Role.MANAGER)
