@@ -8,6 +8,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as compression from 'compression';
 import helmet from 'helmet';
 
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use((req, res, next) => {
@@ -25,8 +26,8 @@ async function bootstrap() {
   app.use(helmet());
   app.enableCors();
 
-  // Compression
-  app.use(compression());
+  // // Compression
+  // app.use(compression());
 
   // Global pipes
   app.useGlobalPipes(new ValidationPipe());
