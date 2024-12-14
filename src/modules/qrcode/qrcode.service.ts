@@ -36,7 +36,7 @@ export class QRCodeService {
 
     // Tạo URL endpoint với token
     const endpoint = type === QRCodeType.CHECKIN ? '/timekeeping/checkin/qr' : '/timekeeping/checkout/qr';
-    const qrData = `${process.env.CLIENT_URL}${endpoint}?token=${token}`;
+    const qrData = `${process.env.SERVER_URL}${endpoint}?token=${token}`;
 
     // Tạo mã QR từ URL
     return await this.generateQRCode(qrData);
