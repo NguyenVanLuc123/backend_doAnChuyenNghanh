@@ -6,7 +6,7 @@ import { Employee } from './entities/employee.entity';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { DepartmentService } from '../department/department.service';
-
+import { Role } from '../../common/enums/role.enum';
 @Injectable()
 export class EmployeeService {
   constructor(
@@ -127,5 +127,26 @@ export class EmployeeService {
     const employee = await this.findOneInDepartment(id, departmentId);
     employee.isActive = true;
     return await this.employeeRepository.save(employee);
+  }
+
+  async findByRole(role: Role): Promise<Employee[]> {
+    return await this.employeeRepository.find({
+      where: { 
+        role,
+        isActive: true 
+      },
+      relations: ['department'],
+    });
+  }
+
+  async findByRoleInDepartment(role: Role, departmentId: string): Promise<Employee[]> {
+    return await this.employeeRepository.find({
+      where: { 
+        role,
+        department: { id: departmentId },
+        isActive: true
+      },
+      relations: ['department'],
+    });
   }
 }

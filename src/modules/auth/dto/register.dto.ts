@@ -27,9 +27,9 @@ export class RegisterDto {
   )
   phoneNumber: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsDateString({}, { message: 'birthDate phải là chuỗi ngày tháng hợp lệ theo ISO 8601' })
-  birthDate: string;
+  birthDate?: string;
 
   @IsOptional()
   @IsEnum(Role, { message: 'role phải là một trong các giá trị ADMIN, USER, MANAGER' })

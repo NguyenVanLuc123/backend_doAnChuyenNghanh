@@ -67,6 +67,7 @@ export class TimekeepingController {
     // if (employeeId !== user.id && !user.isAdmin) {
     //   throw new Error('You can only view your own records');
     // }
+    console.log(employeeId, startDate, endDate);  
     return this.timekeepingService.findByEmployeeAndDateRange(
       employeeId,
       new Date(startDate),

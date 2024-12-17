@@ -22,7 +22,7 @@ export class DepartmentController {
   @Get()
   async findAll(@CurrentUser() user: any) {
     if (user.role === Role.MANAGER) {
-      return this.departmentService.findOne(user.managedDepartmentId);
+      return this.departmentService.findOne(user.departmentId);
     }
     return this.departmentService.findAll();
   }

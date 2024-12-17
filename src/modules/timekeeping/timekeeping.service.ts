@@ -246,6 +246,7 @@ export class TimekeepingService {
     const query = this.timekeepingRepository.createQueryBuilder('timekeeping')
       .leftJoinAndSelect('timekeeping.shift', 'shift')
       .leftJoinAndSelect('timekeeping.employee', 'employee')
+      .leftJoinAndSelect('employee.department', 'department') // Thêm join với department
       .where('employee.departmentId = :departmentId', { departmentId });
 
     if (startDate) {

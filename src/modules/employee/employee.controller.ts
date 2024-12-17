@@ -55,10 +55,13 @@ export class EmployeeController {
   @Get()
   @Roles(Role.ADMIN, Role.MANAGER)
   findAll(@CurrentUser() user: any) {
-    if (user.role === Role.MANAGER) {
-      return this.employeeService.findByDepartment(user.departmentId);
+    if(user.role === Role.ADMIN) {
+      return this.employeeService.findByRole(Role.MANAGER);
     }
-    return this.employeeService.findAll();
+    if (user.role === Role.MANAGER) {
+      return this.employeeService.findByRoleInDepartment(Role.USER, user.departmentId);
+    }
+    return this.employeeService.findByRole(Role.USER);
   }
 
   @Get(':id')
